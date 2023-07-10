@@ -1,6 +1,6 @@
 from flask import Flask, request
 from datetime import datetime
-from registro import Registro, guardar_registro
+from registro import Registro
 
 app = Flask(__name__)
 
@@ -14,7 +14,7 @@ def registrar(device_id, card_id):
     registro = Registro(device_id=device_id, card_id=card_id, ts=ts, ip_request=ip_request)
 
     # Guardar registro en la base de datos
-    guardar_registro(registro)
+    registro.guardar_registro()
 
     return "",201
 

@@ -3,6 +3,7 @@ from sqlalchemy import Column, DateTime, String, BigInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+import requests
 
 Base = declarative_base()
 
@@ -21,13 +22,21 @@ class Registro(Base):
         self.ts = ts
         self.ip_request = ip_request
 
-def guardar_registro(registro):
-    # Configurar la conexión a la base de datos
-    engine = create_engine('mysql+mysqlconnector://app:1234@localhost/registros')
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    def informar(self):
+        requests.post(
+            url="http://ntfy.sh/el_meu_topic",
+            data=f"La targeta:{self.card_id} ha fitxat al dispositiu: {self.device_id} amb data i hora {self.ts} des de la IP: {self.ip_request}",
+            headers={"Title": f"Nou fixatge a {self.device_id}"}
+        )
 
-    # Guardar el registro en la base de datos
-    session.add(registro)
-    session.commit()
-    session.close()
+    def guardar_registro(self):
+        # Configurar la conexión a la base de datos
+        engine = create_engine('mysql+mysqlconnector://app:1234@localhost/registros')
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        self.informar()
+
+        # Guardar el registro en la base de datos
+        session.add(self)
+        session.commit()
+        session.close()
