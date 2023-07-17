@@ -30,13 +30,10 @@ class Registro(Base):
         )
 
     def guardar_registro(self):
-        # Configurar la conexión a la base de datos
         engine = create_engine('mysql+mysqlconnector://app:1234@localhost/registros')
         Session = sessionmaker(bind=engine)
         session = Session()
         self.informar()
-
-        # Guardar el registro en la base de datos
         session.add(self)
         session.commit()
         session.close()
