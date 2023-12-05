@@ -29,7 +29,7 @@ class Registro(Base):
             headers={"Title": f"Nou fixatge a {self.device_id}"}
         )
 
-    def get_all(self):
+    def get_all(cls):
         engine = create_engine('mysql+mysqlconnector://app:MTIzNA==@localhost/registros')
         Session = sessionmaker(bind=engine)
         session = Session()

@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/api/v0/events', methods=['GET'])
 def get_events():
-    resultados = Registro("","","","").get_all()
+    resultados = Registro.get_all(Registro)
     return jsonify(resultados),200
 
 @app.route('/api/v0/<device_id>/<card_id>', methods=['POST'])
