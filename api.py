@@ -1,8 +1,14 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from datetime import datetime
 from registro import Registro
 
 app = Flask(__name__)
+
+
+@app.route('/api/v0/events', methods=['GET'])
+def get_events():
+    resultados = Registro("","","","").get_all()
+    return jsonify(resultados),200
 
 @app.route('/api/v0/<device_id>/<card_id>', methods=['POST'])
 def registrar(device_id, card_id):

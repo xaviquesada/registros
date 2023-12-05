@@ -29,8 +29,23 @@ class Registro(Base):
             headers={"Title": f"Nou fixatge a {self.device_id}"}
         )
 
+    def get_all(self):
+        engine = create_engine('mysql+mysqlconnector://app:MTIzNA==@localhost/registros')
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        resultados = []
+        for row in session.query(Registro).all():
+            resultados.append(
+                {'id': row.id,
+                 'device_id': row.device_id, 
+                 'card_id': row.card_id,
+                 'ts': row.ts,
+                 'ip_request': row.ip_request
+                 })
+        return resultados
+    
     def guardar_registro(self):
-        engine = create_engine('mysql+mysqlconnector://app:1234@localhost/registros')
+        engine = create_engine('mysql+mysqlconnector://app:MTIzNA==@localhost/registros')
         Session = sessionmaker(bind=engine)
         session = Session()
         self.informar()
